@@ -6,11 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Eloquent ORM Editor</title>
     <style type="text/css">
+        body {
+            background-color: #e9ecef;
+            width: 98%;
+            margin: 0 auto;
+        }
         #json-input {
             display: block;
             width: 100%;
             height: 150px;
-            font-size: 16px;
+            font-size: 18px;
+            border-radius: 5px
         }
         #json-display {
             border: 1px solid #000;
@@ -18,6 +24,20 @@
             padding: 10px 20px;
             white-space: pre-line;
             font-size: 17px;
+            border-radius: 5px
+        }
+        .button {
+            background-color: #555555; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px
         }
     </style>
 </head>
@@ -25,8 +45,7 @@
 <form method="post" action="{{ route('orm') }}">
     @csrf
     <textarea id="json-input" name="orm_query">{{ $orm_query }}</textarea>
-    <br />
-    <input type="submit" value="Submit" />
+    <input class="button" type="submit" value="Submit" />
 </form>
 <br/>
 <pre id="json-display"></pre>
