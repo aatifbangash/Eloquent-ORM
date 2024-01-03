@@ -8,7 +8,13 @@ Route::match(['get', 'post'], 'orm', function (Request $request) {
 
     if ($request->method() == 'POST') {
         try {
-            $code = "return App\Models\\$request->orm_query->toArray();";
+
+            if(Str::startsWith($request->orm_query, "DB::")){
+                $code = "return $request->orm_query;";
+            } else {
+                $code = "return App\Models\\$request->orm_query->toArray();";
+            }
+
             $data = eval($code);
         } catch (\Exception $e) {
             $data = ['message' => nl2br(addslashes(htmlspecialchars($e->getMessage())))];
