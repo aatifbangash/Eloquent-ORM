@@ -1,11 +1,16 @@
-Add the code from web.php to your project routes/web.php and copy the orm.blad.php file into your project resource/view/ directory.
-You can query through Eloquent ORM and DB facade as well.
+Add the code from `web.php` to your project routes (`routes/web.php`) and copy the `orm.blade.php` file into your project `resources/views/` directory. You can query through Eloquent ORM and the DB facade as well.
 
-**FYI**: currently it is not recommended for the PROD application.
+**FYI:** Currently, it is not recommended for PROD applications.
 
-**You can run Eloquent ORM queries as well as DB Facade queries in this panel**
+You can run Eloquent ORM queries as well as DB Facade queries in this panel:
 
-DB::table('employees')->join('job_history', 'employees.employee_id', '=', 'job_history.employee_id')->toSql()
+```php
+//run the queries via DB facade 
+DB::table('employees')->join('job_history', 'employees.employee_id', '=', 'job_history.employee_id')->get() 
 
-Employee::query()->with('job')->get() **// to get the JSON response from the query**
-Employee::query()->with('job')->toSql() **// to get the query log along with the binding**
+// to get the JSON response from the query
+Employee::query()->with('job')->get()
+
+// to get the query log along with the binding
+Employee::query()->with('job')->toSql() 
+```
