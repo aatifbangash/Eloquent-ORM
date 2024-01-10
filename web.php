@@ -1,14 +1,27 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 Route::match(['get', 'post'], 'orm', function (Request $request) {
+
+    $correctPasscode = 'aatif';
     $data = [];
 
-    if ($request->method() == 'POST') {
+    if ($request->method() == 'POST' && $request->mode == 'logout') {
+        session(['passcode_verified' => false]);
+    }
+
+    if ($request->method() == 'POST' && $request->mode == 'passcode') {
+        if (!session('passcode_verified') && $request->passcode === $correctPasscode)
+            session(['passcode_verified' => true]);
+    }
+
+    if ($request->method() == 'POST' && $request->mode == 'editor') {
         try {
+
             $request->orm_query = Str::replace(';', '', $request->orm_query);
             if (Str::startsWith($request->orm_query, "DB::")) {
                 $code = "return $request->orm_query;";
