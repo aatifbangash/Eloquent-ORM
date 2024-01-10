@@ -82,7 +82,7 @@
             margin: 0;
             padding: 10px 20px;
             white-space: pre-line;
-            font-size: 16px;
+            font-size: 15px;
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
