@@ -68,8 +68,8 @@
         #json-input {
             display: block;
             width: 100%;
-            height: 150px;
-            font-size: 18px;
+            height: 200px;
+            font-size: 16px;
             border: 1px solid #ddd;
             border-radius: 5px;
             margin-bottom: 10px;
