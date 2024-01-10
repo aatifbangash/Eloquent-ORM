@@ -23,7 +23,7 @@
             margin: 0;
             padding: 10px 20px;
             white-space: pre-line;
-            font-size: 17px;
+            font-size: 16px;
             border-radius: 5px
         }
         .button {
