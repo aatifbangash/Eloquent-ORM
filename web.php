@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 Route::match(['get', 'post'], 'orm', function (Request $request) {
 
-    $correctPasscode = 'aatif';
+    $correctPasscode = 'XXXXXXX'; //Set your passcode here
     $data = [];
 
     if ($request->method() == 'POST' && $request->mode == 'logout') {
