@@ -7,30 +7,44 @@
     <title>Eloquent ORM Editor</title>
     <style type="text/css">
         body {
-            background-color: #e9ecef;
+            background-color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
             width: 98%;
             margin: 0 auto;
         }
 
-        #json-input {
-            display: block;
+        #passcode-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             width: 100%;
-            height: 150px;
-            font-size: 18px;
-            border-radius: 5px
+            max-width: 400px;
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: auto; /* Added to center the form horizontally */
+            margin-top: 10vh; /* Adjust this value to center vertically */
         }
 
-        #json-display {
-            border: 1px solid #000;
-            margin: 0;
-            padding: 10px 20px;
-            white-space: pre-line;
-            font-size: 16px;
-            border-radius: 5px
+        label {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
         .button {
-            background-color: #555555; /* Green */
+            background-color: #007bff;
             border: none;
             color: white;
             padding: 15px 32px;
@@ -40,21 +54,45 @@
             font-size: 16px;
             margin: 4px 2px;
             cursor: pointer;
-            border-radius: 5px
+            border-radius: 5px;
+            transition: background-color 0.3s;
         }
 
-        input[type=text] {
-            width: 25%;
-            padding: 12px 20px;
-            margin: 8px 0;
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        #logout-button {
+            margin-top: 10px;
+        }
+        #json-input {
+            display: block;
+            width: 100%;
+            height: 150px;
+            font-size: 18px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
             box-sizing: border-box;
         }
+
+        #json-display {
+            border: 1px solid #ddd;
+            margin: 0;
+            padding: 10px 20px;
+            white-space: pre-line;
+            font-size: 16px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
     </style>
 </head>
 <body>
 @if(!session('passcode_verified'))
     <br/>
-    <form method="post" action="{{ route('orm') }}">
+    <form id="passcode-form" method="post" action="{{ route('orm') }}">
         @csrf
         <label for="passcode">PASSCODE: </label><br/>
         <input type="text" name="passcode"/><br/>
@@ -65,11 +103,11 @@
     <form method="post" action="{{ route('orm') }}">
         @csrf
         <input type="hidden" name="mode" value="logout"/>
-        <button class="button" style="float: right;">Logout</button>
+        <button id="logout-button" class="button" style="float: right;">Logout</button>
     </form>
     <form method="post" action="{{ route('orm') }}">
         @csrf
-        <textarea id="json-input" name="orm_query">{{ $orm_query }}</textarea>
+        <textarea id="json-input" name="orm_query">{{ session('query') }}</textarea>
         <input type="hidden" name="mode" value="editor"/>
         <input class="button" type="submit" value="Submit"/>
     </form>
