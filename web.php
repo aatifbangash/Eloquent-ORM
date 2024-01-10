@@ -9,7 +9,7 @@ Route::match(['get', 'post'], 'orm', function (Request $request) {
 
     if ($request->method() == 'POST') {
         try {
-
+            $request->orm_query = Str::replace(';', '', $request->orm_query);
             if (Str::startsWith($request->orm_query, "DB::")) {
                 $code = "return $request->orm_query;";
                 $data = eval($code);
