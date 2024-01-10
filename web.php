@@ -10,6 +10,10 @@ Route::match(['get', 'post'], 'orm', function (Request $request) {
     $correctPasscode = 'admin';
     $data = [];
     if ($request->isMethod('post')) {
+        //I have ignored the DML operation here
+        if (Str::contains($request->orm_query, ['create', 'delete', 'update', 'insert'])) {
+            return view('orm', ['data' => []]);
+        }
         if ($request->mode == 'logout') {
             session(['passcode_verified' => false]);
         } elseif ($request->mode == 'passcode' && !session('passcode_verified') && $request->passcode === $correctPasscode) {
