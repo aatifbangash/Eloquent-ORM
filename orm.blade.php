@@ -44,15 +44,15 @@
         }
 
         .button {
-            background-color: #007bff;
+            background-color: #1c2833;
             border: none;
             color: white;
-            padding: 15px 32px;
+            padding: 10px 20px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
+            font-size: 14px;
+            margin: 2px 2px;
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s;
@@ -75,6 +75,7 @@
             margin-bottom: 10px;
             padding: 10px;
             box-sizing: border-box;
+            color: #1c2833;
         }
 
         #json-display {
