@@ -16,7 +16,6 @@ Route::match(['get', 'post'], 'orm', function (Request $request) {
             session(['passcode_verified' => true]);
         } elseif ($request->mode == 'editor' && !empty($request->orm_query) && session('passcode_verified')) {
             try {
-                $request->orm_query = Str::replace(';', '', $request->orm_query);
                 session(['query' => $request->orm_query]);
                 if (Str::startsWith($request->orm_query, "DB::")) {
                     $code = "return $request->orm_query;";
