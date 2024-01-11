@@ -1,3 +1,5 @@
+![image](https://github.com/aatifbangash/Eloquent-ORM-editor/assets/35859555/a498d08a-a042-4ec4-b514-f87152fd7b82)
+
 Copy the file `query_editor.php` to `routes/` directory and add the following block of code at the end of the `web.php` file.
 ```php
 if(App::environment('local')) {
@@ -22,3 +24,5 @@ Employee::query()->with('job')->get()
 // to get the query log along with the binding
 Employee::query()->with('job')->toSql() 
 ```
+
+
