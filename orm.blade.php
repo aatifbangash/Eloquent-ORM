@@ -65,6 +65,7 @@
         #logout-button {
             margin-top: 10px;
         }
+
         #json-input {
             display: block;
             width: 100%;
@@ -83,9 +84,41 @@
             margin: 0;
             padding: 10px 20px;
             white-space: pre-line;
-            font-size: 15px;
+            font-size: 14px;
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #sidebar {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #sidebar li {
+            border-bottom: 1px solid #ddd;
+            transition: background-color 0.3s;
+        }
+
+        #sidebar a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #1c2833;
+            background-color: #f8f9fa; /* Background color */
+            transition: background-color 0.3s;
+            font-size: 14px;
+        }
+
+        #sidebar-title a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #1c2833;
+        }
+
+        #sidebar a:hover {
+            background-color: #1c2833; /* Hover background color */
+            color: #fff;
         }
 
     </style>
@@ -101,24 +134,39 @@
         <input class="button" type="submit" value="Verify"/>
     </form>
 @else
-    <form method="post" action="{{ route('orm') }}">
-        @csrf
-        <input type="hidden" name="mode" value="logout"/>
-        <button id="logout-button" class="button" style="float: right;">Logout</button>
-    </form>
-    <form method="post" action="{{ route('orm') }}">
-        @csrf
-        <textarea id="json-input" name="orm_query">{{ session('query') }}</textarea>
-        <input type="hidden" name="mode" value="editor"/>
-        <input class="button" type="submit" value="Submit"/>
-    </form>
+    <div style="display: flex;">
 
-    <br/>
-    <pre id="json-display"></pre>
+        <!-- Sidebar Section -->
+        <div style="flex: 1; padding-right: 20px;">
+            <h2 id="sidebar-title"><a href="{{ route("orm") }}">Eloq Editor</a></h2>
+            <ul id="sidebar">
+                @foreach($models as $model)
+                    <li>
+                        <a href="{{ route('orm', ['model' => $model]) }}" >{{ $model }}</a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
+        <!-- Main Content Section -->
+        <div style="flex: 8;">
+            <form method="post" action="{{ route('orm') }}">
+                @csrf
+                <input type="hidden" name="mode" value="logout"/>
+                <button id="logout-button" class="button" style="float: right;">Logout</button>
+            </form>
+            <form method="post" action="{{ route('orm') }}">
+                @csrf
+                <textarea id="json-input" name="orm_query">{{ session('query') }}</textarea>
+                <input type="hidden" name="mode" value="editor"/>
+                <input class="button" type="submit" value="Submit"/>
+            </form>
+            <br/>
+            <pre id="json-display"></pre>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script>
         !function () {
             var e = '/* Syntax highlighting for JSON objects */ .json-editor-blackbord {   background: #1c2833;   color: #fff;   font-size: 13px;   font-family: Menlo,Monaco,Consolas,"Courier New",monospace; } @media screen and (min-width: 1600px) {   .json-editor-blackbord {     font-size: 14px;   } }  ul.json-dict, ol.json-array {   list-style-type: none;   margin: 0 0 0 1px;   border-left: 1px dotted #525252;   padding-left: 2em; } .json-string {   /*color: #0B7500;*/   /*color: #BCCB86;*/   color: #0ad161; } .json-literal {   /*color: #1A01CC;*/   /*font-weight: bold;*/   color: #ff8c00; } .json-url {   color: #1e90ff; } .json-property {   color: #4fdee5;   line-height: 160%;   font-weight: 500; }  /* Toggle button */ a.json-toggle {   position: relative;   color: inherit;   text-decoration: none;   cursor: pointer; } a.json-toggle:focus {   outline: none; } a.json-toggle:before {   color: #aaa;   content: "\\25BC"; /* down arrow */   position: absolute;   display: inline-block;   width: 1em;   left: -1em; } a.json-toggle.collapsed:before {   transform: rotate(-90deg); /* Use rotated down arrow, prevents right arrow appearing smaller than down arrow in some browsers */   -ms-transform: rotate(-90deg);   -webkit-transform: rotate(-90deg); }   /* Collapsable placeholder links */ a.json-placeholder {   color: #aaa;   padding: 0 1em;   text-decoration: none;   cursor: pointer; } a.json-placeholder:hover {   text-decoration: underline; }',
