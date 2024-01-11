@@ -5,7 +5,9 @@ if(App::environment('local')) {
 }
 ```
 And also copy the `orm.blade.php` file into your project `resources/views/` directory. You can query through Eloquent ORM and the DB facade as well.
+
 Access the following url `http://localhost:8000/orm` in the browser to access the Eloquent query editor.
+
 **FYI:** Currently, it is not recommended for PROD applications.
 
 You can run Eloquent ORM queries as well as DB Facade queries in this panel:
