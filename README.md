@@ -1,4 +1,10 @@
-Add the code from `web.php` to your project routes (`routes/web.php`) and copy the `orm.blade.php` file into your project `resources/views/` directory. You can query through Eloquent ORM and the DB facade as well.
+Copy the file `query_editor.php` to `routes/` directory and add the following block of code at the end of the `web.php` file.
+```php
+if(App::environment('local')) {
+    require __DIR__.'/query_editor.php';
+}
+```
+And also copy the `orm.blade.php` file into your project `resources/views/` directory. You can query through Eloquent ORM and the DB facade as well.
 
 **FYI:** Currently, it is not recommended for PROD applications.
 
