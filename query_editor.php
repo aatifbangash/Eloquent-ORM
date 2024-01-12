@@ -42,8 +42,21 @@ Route::match(['get', 'post'], 'orm', function (Request $request) {
             try {
                 session(['query' => $request->orm_query]);
                 if (Str::startsWith($request->orm_query, "DB::")) {
-                    $code = "return $request->orm_query;";
-                    $data = eval($code);
+                    if (Str::contains($request->orm_query, "toSql")) {
+                        $query = Str::replace('toSql', 'get', $request->orm_query);
+                        $code = "return $query;";
+                        DB::connection()->enableQueryLog();
+                        eval($code);
+                        $data = DB::getQueryLog();
+                        $data = array_map(function ($d) {
+                            $d['query'] = addslashes(htmlspecialchars($d['query']));
+                            return $d;
+                        }, $data);
+                        DB::disableQueryLog();
+                    } else {
+                        $code = "return $request->orm_query;";
+                        $data = eval($code);
+                    }
                 } elseif (Str::contains($request->orm_query, "toSql")) {
                     $query = Str::replace('toSql', 'get', $request->orm_query);
                     $code = "return App\Models\\$query;";
