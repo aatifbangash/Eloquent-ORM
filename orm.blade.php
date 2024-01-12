@@ -188,10 +188,14 @@
                 var o = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
                 return o.test(e)
             }
-
+            function decodeHtml(html) {
+                var txt = document.createElement("textarea");
+                txt.innerHTML = html;
+                return txt.value;
+            }
             function n(e, r) {
                 var s = "";
-                if ("string" == typeof e) e = e.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"), s += t(e) ? '<a href="' + e + '" class="json-string json-url">"' + e + '"</a>' : '<span class="json-string">"' + e + '"</span>'; else if ("number" == typeof e) s += '<span class="json-literal json-literal-number">' + e + "</span>"; else if ("boolean" == typeof e) s += '<span class="json-literal json-literal-boolean">' + e + "</span>"; else if (null === e) s += '<span class="json-literal json-literal-null">null</span>'; else if (e instanceof Array) if (e.length > 0) {
+                if ("string" == typeof e) e = e.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"), s += t(e) ? '<a href="' + e + '" class="json-string json-url">"' + e + '"</a>' : '<span class="json-string">"' + decodeHtml(e) + '"</span>'; else if ("number" == typeof e) s += '<span class="json-literal json-literal-number">' + e + "</span>"; else if ("boolean" == typeof e) s += '<span class="json-literal json-literal-boolean">' + e + "</span>"; else if (null === e) s += '<span class="json-literal json-literal-null">null</span>'; else if (e instanceof Array) if (e.length > 0) {
                     s += '[<ol class="json-array">';
                     for (var l = 0; l < e.length; ++l) s += "<li>", o(e[l]) && (s += '<a href class="json-toggle"></a>'), s += n(e[l], r), l < e.length - 1 && (s += ","), s += "</li>";
                     s += "</ol>]"
