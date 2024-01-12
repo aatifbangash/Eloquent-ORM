@@ -155,7 +155,7 @@
                 <input type="hidden" name="mode" value="logout"/>
                 <button id="logout-button" class="button" style="float: right;">Logout</button>
             </form>
-            <form method="post" action="{{ route('orm') }}">
+            <form id="json-input-form" method="post" action="{{ route('orm') }}">
                 @csrf
                 <textarea id="json-input" name="orm_query">{{ session('query') }}</textarea>
                 <input type="hidden" name="mode" value="editor"/>
@@ -261,6 +261,15 @@
     </script>
     <script type="text/javascript">
         var editor = new JsonEditor('#json-display', JSON.parse('@json($data)'));
+
+        $(document).ready(function () {
+            $('#json-input').keydown(function (e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    $('#json-input-form').submit();
+                }
+            });
+        });
     </script>
 @endif
 </body>
