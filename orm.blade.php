@@ -142,7 +142,7 @@
             <ul id="sidebar">
                 @foreach($models as $model)
                     <li>
-                        <a href="{{ route('orm', ['model' => $model]) }}" >{{ $model }}</a>
+                        <a href="{{ route('orm', ['model' => $model]) }}">{{ $model }}</a>
                     </li>
                 @endforeach
             </ul>
@@ -160,6 +160,7 @@
                 <textarea id="json-input" name="orm_query">{{ session('query') }}</textarea>
                 <input type="hidden" name="mode" value="editor"/>
                 <input class="button" type="submit" value="Submit"/>
+                <span><strong>Found Documents:</strong> @if(is_iterable($data)) {{count($data)}} @else 0 @endif</span>
             </form>
             <br/>
             <pre id="json-display"></pre>
@@ -188,11 +189,13 @@
                 var o = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
                 return o.test(e)
             }
+
             function decodeHtml(html) {
                 var txt = document.createElement("textarea");
                 txt.innerHTML = html;
                 return txt.value;
             }
+
             function n(e, r) {
                 var s = "";
                 if ("string" == typeof e) e = e.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"), s += t(e) ? '<a href="' + e + '" class="json-string json-url">"' + e + '"</a>' : '<span class="json-string">"' + decodeHtml(e) + '"</span>'; else if ("number" == typeof e) s += '<span class="json-literal json-literal-number">' + e + "</span>"; else if ("boolean" == typeof e) s += '<span class="json-literal json-literal-boolean">' + e + "</span>"; else if (null === e) s += '<span class="json-literal json-literal-null">null</span>'; else if (e instanceof Array) if (e.length > 0) {
