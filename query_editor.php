@@ -2,27 +2,27 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
-Route::match(['get', 'post'], 'orm', function (Request $request) {
-    function getModels($path)
-    {
-        $out = [];
-        $results = scandir($path);
-        foreach ($results as $result) {
-            if ($result === '.' or $result === '..') continue;
-            $filename = $path . '/' . $result;
-            if (is_dir($filename)) {
-                $out = array_merge($out, getModels($filename));
-            } else {
-                if (pathinfo($result, PATHINFO_EXTENSION) != 'php') continue;
-                $out[] = substr($result, 0, -4);
-            }
+function getModels($path)
+{
+    $out = [];
+    $results = scandir($path);
+    foreach ($results as $result) {
+        if ($result === '.' or $result === '..') continue;
+        $filename = $path . '/' . $result;
+        if (is_dir($filename)) {
+            $out = array_merge($out, getModels($filename));
+        } else {
+            if (pathinfo($result, PATHINFO_EXTENSION) != 'php') continue;
+            $out[] = substr($result, 0, -4);
         }
-        return $out;
     }
+    return $out;
+}
+
+Route::match(['get', 'post'], 'orm', function (Request $request) {
 
     $models = getModels(app_path() . "/Models");
     sort($models);
@@ -50,13 +50,23 @@ Route::match(['get', 'post'], 'orm', function (Request $request) {
                     DB::connection()->enableQueryLog();
                     eval($code);
                     $data = DB::getQueryLog();
+
+                    $data = array_map(function ($d) {
+                        $d['query'] = addslashes(htmlspecialchars($d['query']));
+                        return $d;
+                    }, $data);
+
                     DB::disableQueryLog();
                 } else {
                     $code = 'return App\Models\\' . $request->orm_query . ';';
                     $data = eval($code);
+
+                    if (Str::contains($request->orm_query, "toRawSql"))
+                        $data = addslashes(htmlspecialchars($data));
+
                 }
             } catch (\Exception $e) {
-                $data = ['message' => nl2br(addslashes(htmlspecialchars($e->getMessage())))];
+                $data = ['message' => addslashes(htmlspecialchars($e->getMessage()))];
             }
         }
     }
@@ -68,17 +78,17 @@ Route::match(['get', 'post'], 'orm', function (Request $request) {
                 return view('orm', ['data' => [], 'models' => $models]);
             }
             try {
-                    if(!empty($request->model)){
-                        $request->model = $request->model . '::query()
+                if (!empty($request->model)) {
+                    $request->model = $request->model . '::query()
 ->take(25)
 ->get();';
 
-                        session(['query' => $request->model]);
-                        $code = 'return App\Models\\' . $request->model . ';';
-                        $data = eval($code);
-                    }
+                    session(['query' => $request->model]);
+                    $code = 'return App\Models\\' . $request->model . ';';
+                    $data = eval($code);
+                }
             } catch (\Exception $e) {
-                $data = ['message' => nl2br(addslashes(htmlspecialchars($e->getMessage())))];
+                $data = ['message' => addslashes(htmlspecialchars($e->getMessage()))];
             }
         }
     }
