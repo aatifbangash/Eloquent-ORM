@@ -8,7 +8,7 @@ if(App::environment('local')) {
 ```
 And also copy the `orm.blade.php` file into your project `resources/views/` directory. You can query through Eloquent ORM and the DB facade as well.
 
-Access the following url `http://localhost:8000/orm` in the browser to access the Eloquent query editor.
+Access the following url `http://localhost:8000/orm` in the browser to access the Eloquent query editor. The default passcode is `admin`
 
 **FYI:** Currently, it is not recommended for PROD applications.
 
